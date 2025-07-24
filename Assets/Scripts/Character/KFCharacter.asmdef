@@ -1,0 +1,16 @@
+{
+    "name": "KFCharacter",
+    "rootNamespace": "KingFighting.Character",
+    "references": [
+        "GUID:e40033f337151604e8f57ae8fdd9a1ce"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
