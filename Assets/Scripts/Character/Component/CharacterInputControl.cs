@@ -7,25 +7,28 @@ namespace KingFighting.Character
     [DisallowMultipleComponent]
     public class CharacterInputControl : MonoBehaviour
     {
-        public event Action<Vector2> OnMoveInputPerform;
-
         private CharacterInputMapping input;
 
-        private void Awake()
+        public void Init()
         {
             input = new CharacterInputMapping();
+            input.Enable();
+        }
 
-            input.MoveInputPerform += OnMoveInputPerform;
+        public void AddMoveInputListener(Action<Vector2> onListenerAction)
+        {
+            input.MoveInputPerform -= onListenerAction;
+            input.MoveInputPerform += onListenerAction;
         }
 
         private void OnEnable()
         {
-            input.Enable();
+            input?.Enable();
         }
 
         private void OnDisable()
         {
-            input.Disable();
+            input?.Disable();
         }
     }
 }

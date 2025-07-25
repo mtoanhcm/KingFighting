@@ -10,6 +10,8 @@ namespace KingFighting.Character
         public float AttackRange;
         public float AttackSpeed;
         public float MoveSpeed;
+        public float CombatMoveSpeed;
         public float RotateSpeed;
+        public float DetectEnemyRange;
     }
 }

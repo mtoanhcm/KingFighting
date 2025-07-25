@@ -2,7 +2,8 @@
     "name": "KFCharacter",
     "rootNamespace": "KingFighting.Character",
     "references": [
-        "GUID:e40033f337151604e8f57ae8fdd9a1ce"
+        "GUID:e40033f337151604e8f57ae8fdd9a1ce",
+        "GUID:7afca514c2ad21142bec0acd54b66925"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

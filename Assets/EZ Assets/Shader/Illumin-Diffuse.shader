@@ -34,14 +34,19 @@ Shader "T70/URP/SelfIlluminDiffuse"
                 float2 uv : TEXCOORD0;
             };
 
-            sampler2D _MainTex;
-            sampler2D _Illum;
-            float4 _MainTex_ST;
-            float4 _Illum_ST;
-            float4 _Color;
-            float _Emission;
+            TEXTURE2D(_MainTex);
+            SAMPLER(sampler_MainTex);
+            TEXTURE2D(_Illum);
+            SAMPLER(sampler_Illum);
 
-            Varyings vert (Attributes IN)
+            CBUFFER_START(UnityPerMaterial)
+                float4 _MainTex_ST;
+                float4 _Illum_ST;
+                float4 _Color;
+                float _Emission;
+            CBUFFER_END
+
+            Varyings vert(Attributes IN)
             {
                 Varyings OUT;
                 OUT.positionHCS = TransformObjectToHClip(IN.positionOS.xyz);
@@ -49,10 +54,10 @@ Shader "T70/URP/SelfIlluminDiffuse"
                 return OUT;
             }
 
-            half4 frag (Varyings IN) : SV_Target
+            half4 frag(Varyings IN) : SV_Target
             {
-                half4 texColor = tex2D(_MainTex, IN.uv) * _Color;
-                half4 illumTex = tex2D(_Illum, IN.uv);
+                half4 texColor = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv) * _Color;
+                half4 illumTex = SAMPLE_TEXTURE2D(_Illum, sampler_Illum, IN.uv);
                 half3 emission = texColor.rgb * illumTex.a * _Emission;
 
                 return half4(texColor.rgb + emission, texColor.a);

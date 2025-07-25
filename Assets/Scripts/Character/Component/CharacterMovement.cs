@@ -6,12 +6,14 @@ namespace KingFighting.Character
     public class CharacterMovement : MonoBehaviour
     {
         private float moveSpeed;
+        private float combatMoveSpeed;
         private float rotateSpeed;
 
         private Vector3 moveDirection;
         private Vector3 lookPos;
 
         private Rigidbody rb;
+        private bool isInCombat;
 
         private void Awake()
         {
@@ -20,8 +22,8 @@ namespace KingFighting.Character
 
         private void FixedUpdate()
         {
-            var moveVector = moveSpeed * Time.fixedDeltaTime * moveDirection;
-            var lookVector = lookPos != Vector3.zero ?
+            var moveVector = (isInCombat ? combatMoveSpeed : moveSpeed) * Time.fixedDeltaTime * moveDirection;
+            var lookVector = isInCombat ?
                 (lookPos - transform.position).normalized :
                 moveVector.normalized;
 
@@ -37,16 +39,26 @@ namespace KingFighting.Character
             }
         }
 
-        public void Init(float moveSpeed, float rotateSpeed)
+        public void Init(float moveSpeed, float combatMoveSpeed, float rotateSpeed)
         {
             this.moveSpeed = moveSpeed;
             this.rotateSpeed = rotateSpeed;
+            this.combatMoveSpeed = combatMoveSpeed;
         }
 
-        public void UpdateMoveDirection(Vector3 direction, Vector3 lookPos)
+        public void UpdateCombatState(bool isInCombat)
         {
-            moveDirection = direction;
+            this.isInCombat = isInCombat;
+        }
+
+        public void UpdateLookFocusPos(Vector3 lookPos)
+        {
             this.lookPos = lookPos;
+        }
+
+        public void UpdateMoveDirection(Vector2 direction)
+        {
+            moveDirection = new Vector3(direction.x, 0, direction.y);
         }
     }
 }

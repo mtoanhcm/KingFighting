@@ -9,7 +9,9 @@ namespace KingFighting.Character
         public float AttackRange { get; private set; }
         public float AttackSpeed { get; private set; }
         public float MoveSpeed { get; private set; }
+        public float CombatMoveSpeed { get; private set; }
         public float RotateSpeed { get; private set; }
+        public float DetectEnemyRange { get; private set; }
 
 
         public CharacterData(CharacterDataConfig config) { 
@@ -18,7 +20,9 @@ namespace KingFighting.Character
             AttackRange = config.AttackRange;
             AttackSpeed = config.AttackSpeed;
             MoveSpeed = config.MoveSpeed;
+            CombatMoveSpeed = config.CombatMoveSpeed;
             RotateSpeed = config.RotateSpeed;
+            DetectEnemyRange = config.DetectEnemyRange;
         }
     }
 }
