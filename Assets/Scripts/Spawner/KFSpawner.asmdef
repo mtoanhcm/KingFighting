@@ -1,0 +1,16 @@
+{
+    "name": "KFSpawner",
+    "rootNamespace": "KingFighting.Spawner",
+    "references": [
+        "GUID:3b632a77defdf644fbbd3bcf6e2fcecb"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
