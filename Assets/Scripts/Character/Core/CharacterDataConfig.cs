@@ -9,6 +9,7 @@ namespace KingFighting.Character
         public float Damage;
         public float AttackRange;
         public float AttackSpeed;
+        public float CooldownAttack;
         public float MoveSpeed;
         public float CombatMoveSpeed;
         public float RotateSpeed;

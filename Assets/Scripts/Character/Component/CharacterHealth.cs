@@ -5,8 +5,10 @@ namespace KingFighting.Character
 {
     public class CharacterHealth : MonoBehaviour
     {
-        public event Action OnDeath;
+        private Action onDeath;
+        private Action onTakeHit;
         public float HealthInPercent => currentHealth / maxHealth;
+        public bool IsAlive => currentHealth > 0;
 
         private float maxHealth;
         private float currentHealth;
@@ -15,14 +17,29 @@ namespace KingFighting.Character
         {
             this.maxHealth = maxHealth;
             currentHealth = maxHealth;
+
+            enabled = true;
         }
 
         public void TakeDamage(float damage)
         {
             currentHealth -= Mathf.Abs(damage);
             if (currentHealth <= 0) { 
-                OnDeath?.Invoke();
+                onDeath?.Invoke();
+                return;
             }
+
+            onTakeHit?.Invoke();
+        }
+
+        public void AddListenerTakeHit(Action action) { 
+            onTakeHit -= action;
+            onTakeHit += action;
+        }
+
+        public void AddListenerDeath(Action action) { 
+            onDeath -= action;
+            onDeath += action;
         }
     }
 }

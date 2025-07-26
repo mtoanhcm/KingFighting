@@ -17,8 +17,16 @@ namespace KingFighting.Character
             InitEventListener();
         }
 
+        protected virtual void OnDeath()
+        {
+            movementComp.enabled = false;
+            sensorComp.enabled = false;
+            combatComp.enabled = false;
+            healthComp.enabled = false;
+        }
+
         protected virtual void InitComponent(CharacterData data) {
-            InitCombatComp(data.Damage);
+            InitCombatComp(data.Damage, data.AttackRange, data.CooldownAttack);
             InitHealthComp(data.MaxHealth);
             InitMovementComp(data.MoveSpeed, data.CombatMoveSpeed, data.RotateSpeed);
             InitAnimationComp();
@@ -29,8 +37,15 @@ namespace KingFighting.Character
             combatComp.AddListenerCombatStateChange(animationComp.UpdateCombatState);
             combatComp.AddListenerCombatStateChange(movementComp.UpdateCombatState);
             combatComp.AddListenerFocusPosInCombatChange(movementComp.UpdateLookFocusPos);
+            combatComp.AddListenerTriggerAttack(animationComp.TriggerAttack);
+
+            animationComp.AddListenerTriggerHitByAnimEvent(combatComp.ApplyDamageArea);
 
             sensorComp.AddListenerEnemyDetect(combatComp.UpdateEnemy);
+
+            healthComp.AddListenerTakeHit(animationComp.TriggerHit);
+            healthComp.AddListenerDeath(animationComp.TriggerKnockOut);
+            healthComp.AddListenerDeath(OnDeath);
         }
 
         protected virtual void InitHealthComp(float maxHealth)
@@ -61,14 +76,15 @@ namespace KingFighting.Character
             }
         }
 
-        protected virtual void InitCombatComp(float damage)
+        protected virtual void InitCombatComp(float damage, float attackRange, float cooldownAttack)
         {
             if (combatComp == null || !TryGetComponent(out combatComp))
             {
                 combatComp = gameObject.AddComponent<CharacterCombat>();
             }
 
-            combatComp.Init(damage);
+            var targetLayer = ObjectLayer.TargetHitLayer(LayerMask.LayerToName(gameObject.layer));
+            combatComp.Init(damage, attackRange, cooldownAttack, targetLayer);
         }
 
         protected virtual void InitCharacterSensor(float detectRange)

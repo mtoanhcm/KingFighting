@@ -1,11 +1,7 @@
 {
-    "name": "KFCharacter",
-    "rootNamespace": "KingFighting.Character",
-    "references": [
-        "GUID:e40033f337151604e8f57ae8fdd9a1ce",
-        "GUID:7afca514c2ad21142bec0acd54b66925",
-        "GUID:6e4e68396e9766a48bc85343d91a2b25"
-    ],
+    "name": "KFAnimation",
+    "rootNamespace": "KingFighting.Animation",
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

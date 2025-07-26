@@ -14,6 +14,7 @@ namespace KingFighting.Character
         private float tempCooldownCheckAround;
 
         private bool isInit;
+        private bool isDeath;
 
         private readonly float TIME_CHECK_AROUND = 1f;
         private readonly int DETECTOR_LINE_SEGMENTS = 64;
@@ -41,6 +42,7 @@ namespace KingFighting.Character
 
             enemiesAround = new Collider[10];
 
+            enabled = true;
             isInit = true;
         }
 
@@ -53,7 +55,15 @@ namespace KingFighting.Character
 
             if(totalEnemiesAround == 1)
             {
-                onDetectEnemy?.Invoke(enemiesAround[0].transform);
+                var enemy = enemiesAround[0].transform;
+                var health = enemy.GetComponent<CharacterHealth>();
+
+                if (!health.IsAlive)
+                {
+                    enemy = null;
+                }
+
+                onDetectEnemy?.Invoke(enemy);
                 return;
             }
 
@@ -61,20 +71,23 @@ namespace KingFighting.Character
             float minSqrDist = float.MaxValue;
             for (int i = 0; i < totalEnemiesAround; i++)
             {
-                var enemy = enemiesAround[i];
+                var enemy = enemiesAround[i].transform;
                 if (enemy == null) {
                     continue;
                 }
 
-                float sqrDist = Vector3.SqrMagnitude(enemy.transform.position - transform.position);
+                if(!enemy.TryGetComponent<CharacterHealth>(out var health) || !health.IsAlive)
+                {
+                    continue;
+                }
+
+                float sqrDist = Vector3.SqrMagnitude(enemy.position - transform.position);
                 if (sqrDist < minSqrDist)
                 {
                     minSqrDist = sqrDist;
-                    nearestEnemy = enemy.transform;
+                    nearestEnemy = enemy;
                 }
             }
-
-            Debug.Log($"Character {gameObject.name} detect enemy {nearestEnemy.name}");
 
             onDetectEnemy?.Invoke(nearestEnemy);
         }

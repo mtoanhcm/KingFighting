@@ -44,6 +44,8 @@ namespace KingFighting.Character
             this.moveSpeed = moveSpeed;
             this.rotateSpeed = rotateSpeed;
             this.combatMoveSpeed = combatMoveSpeed;
+
+            enabled = true;
         }
 
         public void UpdateCombatState(bool isInCombat)

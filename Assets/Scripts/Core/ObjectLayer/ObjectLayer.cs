@@ -6,11 +6,11 @@ namespace KingFighting.Core
     {
         public const string PlayerLayerName = "Player";
         public const string EnemyLayerName = "Enemy";
-        public const string EnemyDeathLayerName = "EnemyDeath";
+        public const string DeathLayerName = "Death";
         public const string ObstacleLayerName = "Obstacle";
 
         public static LayerMask ObstacleLayer => LayerMask.GetMask(ObstacleLayerName);
-        public static LayerMask DeathEnemyLayer => LayerMask.GetMask(EnemyDeathLayerName);
+        public static LayerMask DeathEnemyLayer => LayerMask.GetMask(DeathLayerName);
 
         public static LayerMask TargetHitLayer(string seftLayerName) { 
             return seftLayerName switch
