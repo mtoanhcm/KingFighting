@@ -19,7 +19,7 @@ namespace KingFighting.Character
         {
             base.InitEventListener();
 
-            inputControlComp.AddMoveInputListener(movementComp.UpdateMoveDirection);
+            inputControlComp.AddMoveInputListener(movementComp.Move);
             inputControlComp.AddMoveInputListener(animationComp.UpdateMoveFactoByInputDirection);
         }
 

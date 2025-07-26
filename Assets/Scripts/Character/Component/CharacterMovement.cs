@@ -1,10 +1,13 @@
 using UnityEngine;
+using KingFighting.Core;
 
 namespace KingFighting.Character
 {
     [RequireComponent(typeof(Rigidbody))]
-    public class CharacterMovement : MonoBehaviour
+    public class CharacterMovement : MonoBehaviour, IMovement
     {
+        public float MoveSpeed => moveSpeed;
+
         private float moveSpeed;
         private float combatMoveSpeed;
         private float rotateSpeed;
@@ -14,6 +17,7 @@ namespace KingFighting.Character
 
         private Rigidbody rb;
         private bool isInCombat;
+        private bool canMove;
 
         private void Awake()
         {
@@ -27,7 +31,7 @@ namespace KingFighting.Character
                 (lookPos - transform.position).normalized :
                 moveVector.normalized;
 
-            if(moveVector != Vector3.zero)
+            if(canMove && moveVector != Vector3.zero)
             {
                 rb.MovePosition(rb.position + moveVector);
             }
@@ -45,6 +49,8 @@ namespace KingFighting.Character
             this.rotateSpeed = rotateSpeed;
             this.combatMoveSpeed = combatMoveSpeed;
 
+            canMove = true;
+
             enabled = true;
         }
 
@@ -58,9 +64,13 @@ namespace KingFighting.Character
             this.lookPos = lookPos;
         }
 
-        public void UpdateMoveDirection(Vector2 direction)
+        public void Move(Vector2 direction)
         {
             moveDirection = new Vector3(direction.x, 0, direction.y);
+        }
+
+        public void StopMove(bool isStop) {
+            canMove = !isStop;
         }
     }
 }

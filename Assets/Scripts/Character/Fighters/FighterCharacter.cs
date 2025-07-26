@@ -1,5 +1,6 @@
 using KingFighting.Core;
 using UnityEngine;
+using KingFighting.AI;
 
 namespace KingFighting.Character
 {
@@ -7,6 +8,8 @@ namespace KingFighting.Character
     {
         [SerializeField]
         private string myLayer;
+
+        private AINoobBrain noobBrain;
 
         public override void Spawn(CharacterData characterData)
         {
@@ -18,11 +21,15 @@ namespace KingFighting.Character
         protected override void InitComponent(CharacterData data)
         {
             base.InitComponent(data);
+
+            InitAIBrain();
         }
 
         protected override void InitEventListener()
         {
             base.InitEventListener();
+
+            sensorComp.AddListenerEnemyDetect(noobBrain.SetTarget);
         }
 
         protected override void OnDeath()
@@ -30,6 +37,15 @@ namespace KingFighting.Character
             base.OnDeath();
 
             gameObject.layer = LayerMask.NameToLayer(ObjectLayer.DeathLayerName);
+        }
+
+        private void InitAIBrain() {
+            if (noobBrain == null || !TryGetComponent(out noobBrain))
+            {
+                noobBrain = gameObject.AddComponent<AINoobBrain>();
+            }
+
+            noobBrain.Init(movementComp, combatComp, healthComp, null);
         }
     }
 }

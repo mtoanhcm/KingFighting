@@ -1,11 +1,8 @@
 {
-    "name": "KFCharacter",
-    "rootNamespace": "KingFighting.Character",
+    "name": "KFAI",
+    "rootNamespace": "KingFighting.AI",
     "references": [
-        "GUID:e40033f337151604e8f57ae8fdd9a1ce",
-        "GUID:7afca514c2ad21142bec0acd54b66925",
-        "GUID:6e4e68396e9766a48bc85343d91a2b25",
-        "GUID:ce896d1e75e8cf149bef9a363a50e149"
+        "GUID:7afca514c2ad21142bec0acd54b66925"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

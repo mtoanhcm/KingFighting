@@ -1,12 +1,13 @@
-using Sirenix.OdinInspector;
+using KingFighting.Core;
 using System;
-using System.Text;
 using UnityEngine;
 
 namespace KingFighting.Character
 {
-    public class CharacterCombat : MonoBehaviour
+    public class CharacterCombat : MonoBehaviour, ICombat
     {
+        public float AttackRange => attackRange;
+
         private Action<bool> onChangeCombatState;
         private Action<Vector3> onFocusPosChange;
         private Action onTriggerAttack;
