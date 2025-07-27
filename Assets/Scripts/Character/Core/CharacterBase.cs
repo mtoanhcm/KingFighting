@@ -3,8 +3,12 @@ using KingFighting.Core;
 
 namespace KingFighting.Character
 {
-    public abstract class CharacterBase : MonoBehaviour
+    public abstract class CharacterBase : MonoBehaviour, ICharacter
     {
+        public bool IsAlive => healthComp.IsAlive;
+
+        public Transform Self => transform;
+
         protected CharacterHealth healthComp;
         protected CharacterCombat combatComp;
         protected CharacterAnimation animationComp;

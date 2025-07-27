@@ -21,6 +21,11 @@ namespace KingFighting.AI
 
         public void Tick()
         {
+            if(context.Target == null)
+            {
+                return;
+            }
+
             var direction = context.SteeringBehaviour.SeekToTarget(context.Target.position);
             context.MovementComp.Move(new Vector2(direction.x, direction.z));
         }

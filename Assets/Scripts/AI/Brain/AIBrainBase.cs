@@ -6,7 +6,6 @@ namespace KingFighting.AI
 {
     public abstract class AIBrainBase : MonoBehaviour
     {
-        protected Transform target;
         protected Func<bool> onStopBrain;
         protected IMovement movementComp;
         protected ICombat combatComp;

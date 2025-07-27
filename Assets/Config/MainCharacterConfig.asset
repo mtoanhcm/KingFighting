@@ -20,4 +20,4 @@ MonoBehaviour:
   MoveSpeed: 1
   CombatMoveSpeed: 0.5
   RotateSpeed: 5
-  DetectEnemyRange: 2
+  DetectEnemyRange: 5

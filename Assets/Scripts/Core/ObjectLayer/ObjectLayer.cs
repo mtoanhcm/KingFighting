@@ -6,6 +6,7 @@ namespace KingFighting.Core
     {
         public const string PlayerLayerName = "Player";
         public const string EnemyLayerName = "Enemy";
+        public const string TeammateLayerName = "Teammate";
         public const string DeathLayerName = "Death";
         public const string ObstacleLayerName = "Obstacle";
 
@@ -16,8 +17,9 @@ namespace KingFighting.Core
             return seftLayerName switch
             {
                 PlayerLayerName => LayerMask.GetMask(EnemyLayerName, ObstacleLayerName),
-                EnemyLayerName => LayerMask.GetMask(PlayerLayerName, ObstacleLayerName),
-                ObstacleLayerName => LayerMask.GetMask(PlayerLayerName, EnemyLayerName),
+                EnemyLayerName => LayerMask.GetMask(PlayerLayerName, TeammateLayerName, ObstacleLayerName),
+                TeammateLayerName => LayerMask.GetMask(EnemyLayerName, ObstacleLayerName),
+                ObstacleLayerName => LayerMask.GetMask(PlayerLayerName, TeammateLayerName, EnemyLayerName),
                 _ => 0,
             };
         }

@@ -6,7 +6,14 @@ namespace KingFighting.Character
 {
     public class MainCharacter : CharacterBase
     {
+        private Action onMainCharacterDeath;
         private CharacterInputControl inputControlComp;
+
+        public void AddListenerMainCharacterDeath(Action action)
+        {
+            onMainCharacterDeath -= action;
+            onMainCharacterDeath += action;
+        }
 
         protected override void InitComponent(CharacterData data)
         {
@@ -21,6 +28,8 @@ namespace KingFighting.Character
 
             inputControlComp.AddMoveInputListener(movementComp.Move);
             inputControlComp.AddMoveInputListener(animationComp.UpdateMoveFactoByInputDirection);
+
+            healthComp.AddListenerDeath(MainCharacterDeath);
         }
 
         private void InitInputControlComp()
@@ -30,6 +39,11 @@ namespace KingFighting.Character
                 inputControlComp = gameObject.AddComponent<CharacterInputControl>();
                 inputControlComp.Init();
             }
+        }
+
+        private void MainCharacterDeath()
+        {
+            onMainCharacterDeath?.Invoke();
         }
     }
 }
