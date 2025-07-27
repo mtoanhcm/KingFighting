@@ -30,6 +30,7 @@ namespace KingFighting.Character
             base.InitEventListener();
 
             sensorComp.AddListenerEnemyDetect(noobBrain.SetTarget);
+            movementComp.AddListenerMoveByVector(animationComp.UpdateMoveFactoByInputDirection);
         }
 
         protected override void OnDeath()

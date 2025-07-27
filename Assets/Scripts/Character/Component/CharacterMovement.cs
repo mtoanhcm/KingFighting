@@ -1,11 +1,14 @@
 using UnityEngine;
 using KingFighting.Core;
+using System;
 
 namespace KingFighting.Character
 {
     [RequireComponent(typeof(Rigidbody))]
     public class CharacterMovement : MonoBehaviour, IMovement
     {
+        private Action<Vector2> onMoveByVector;
+
         public float MoveSpeed => moveSpeed;
 
         private float moveSpeed;
@@ -67,10 +70,17 @@ namespace KingFighting.Character
         public void Move(Vector2 direction)
         {
             moveDirection = new Vector3(direction.x, 0, direction.y);
+            onMoveByVector?.Invoke(direction);
         }
 
         public void StopMove(bool isStop) {
             canMove = !isStop;
+        }
+
+        public void AddListenerMoveByVector(Action<Vector2> action)
+        {
+            onMoveByVector -= action;
+            onMoveByVector += action;
         }
     }
 }

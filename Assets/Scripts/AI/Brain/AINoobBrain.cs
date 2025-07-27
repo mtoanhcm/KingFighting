@@ -9,6 +9,7 @@ namespace KingFighting.AI
         private StateMachine stateMachine;
         private SteeringBehaviour steeringAgent;
 
+        private StateContext context;
         private IState idleState;
         private IState chaseState;
         private IState combatState;
@@ -33,12 +34,23 @@ namespace KingFighting.AI
 
         public override void SetTarget(Transform target) {
             this.target = target;
+            context.Target = target;
         }
 
         private void InitStateMachine() {
+
+            context = new StateContext()
+            {
+                CombatComp = combatComp,
+                HealthComp = healthComp,
+                MovementComp = movementComp,
+                SteeringBehaviour = steeringAgent,
+                Target = null
+            };
+
             stateMachine = new StateMachine();
-            chaseState = new ChaseState(target, steeringAgent, movementComp.Move);
-            combatState = new CombatState(target, combatComp, movementComp);
+            chaseState = new ChaseState(context);
+            combatState = new CombatState(context);
             idleState = new IdleState();
 
             stateMachine.SetInitialState(idleState);
@@ -61,12 +73,7 @@ namespace KingFighting.AI
             var distanceToTarget = (target.transform.position - transform.position).sqrMagnitude;
             var attackRange = combatComp.AttackRange;
 
-            bool isInRange = distanceToTarget < attackRange * attackRange;
-            if (isInRange) { 
-                
-            }
-
-            return isInRange;
+            return distanceToTarget < attackRange * attackRange;
         }
     }
 }

@@ -11,13 +11,13 @@ namespace KingFighting.AI
         private readonly float moveSpeed = 5f;
 
         // Separation
-        private readonly float separationRadius = 2f;
-        private readonly float separationStrength = 3f;
+        private readonly float separationRadius = 0.5f;
+        private readonly float separationStrength = 1f;
         public Collider[] neighbors;
 
         // Obstacle Avoidance
         private readonly float obstacleDetectDistance = 2f;
-        private readonly float obstacleAvoidStrength = 5f;
+        private readonly float obstacleAvoidStrength = 3f;
 
         private LayerMask obstacleLayerMask;
         private LayerMask selfLayerMask;
@@ -33,7 +33,7 @@ namespace KingFighting.AI
             neighbors = new Collider[32];
         }
 
-        public Vector3 SeekToTarget(Vector3 targetPosition, bool useSeparation = true, bool useObstacleAvoidance = true)
+        public Vector3 SeekToTarget(Vector3 targetPosition, bool useSeparation = false, bool useObstacleAvoidance = false)
         {
             Vector3 moveDir = Seek(targetPosition);
 

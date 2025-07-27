@@ -5,25 +5,23 @@ namespace KingFighting.AI
 {
     public class CombatState : IState
     {
-        private Transform target;
-        private ICombat combatComp;
-        private IMovement movementComp;
+        public StateContext Conext => context;
 
-        public CombatState(Transform target, ICombat combatComp, IMovement movementComp)
+        private StateContext context;
+
+        public CombatState(StateContext context)
         {
-            this.target = target;
-            this.combatComp = combatComp;
-            this.movementComp = movementComp;
+            this.context = context;
         }
 
         public void OnEnter()
         {
-            movementComp.StopMove(true);
+            context.MovementComp.StopMove(true);
         }
 
         public void OnExit()
         {
-            movementComp.StopMove(false);
+            context.MovementComp.StopMove(false);
         }
 
         public void Tick()
