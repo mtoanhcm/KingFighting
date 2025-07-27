@@ -53,6 +53,7 @@ namespace KingFighting.Character
             {
                 animator.SetFloat(moveXFactorHash, moveInputDirect.x);
                 animator.SetFloat(moveYFactorHash, moveInputDirect.y);
+                animator.SetFloat(normalMoveFactorHash, 0);
             } else
             {
                 animator.SetFloat(normalMoveFactorHash, moveInputDirect.magnitude);

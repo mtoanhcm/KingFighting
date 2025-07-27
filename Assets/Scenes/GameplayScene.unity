@@ -3335,7 +3335,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   config: {fileID: 11400000, guid: b6211c64cc38d6e41bc02401de9ca69f, type: 2}
-  fighterCharacter: {fileID: 1774220569}
+  fighterCharacter:
+  - {fileID: 1774220569}
+  - {fileID: 0}
 --- !u!4 &1981713516
 Transform:
   m_ObjectHideFlags: 0

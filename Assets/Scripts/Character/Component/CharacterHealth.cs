@@ -1,9 +1,10 @@
 using System;
 using UnityEngine;
+using KingFighting.Core;
 
 namespace KingFighting.Character
 {
-    public class CharacterHealth : MonoBehaviour
+    public class CharacterHealth : MonoBehaviour, IHealth
     {
         private Action onDeath;
         private Action onTakeHit;

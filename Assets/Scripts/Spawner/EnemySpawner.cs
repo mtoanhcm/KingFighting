@@ -1,5 +1,6 @@
 using KingFighting.Character;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 namespace KingFighting.Spawner
 {
@@ -8,7 +9,7 @@ namespace KingFighting.Spawner
         [SerializeField]
         private CharacterDataConfig config;
         [SerializeField]
-        private FighterCharacter fighterCharacter;
+        private FighterCharacter[] fighterCharacter;
 
         private void Start()
         {
@@ -23,7 +24,9 @@ namespace KingFighting.Spawner
                 return;
             }
 
-            fighterCharacter.Spawn(new CharacterData(config));
+            foreach (var character in fighterCharacter) {
+                character.Spawn(new CharacterData(config));
+            }
         }
     }
 }
