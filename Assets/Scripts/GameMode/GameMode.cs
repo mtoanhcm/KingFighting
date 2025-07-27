@@ -1,15 +1,19 @@
 using KingFighting.Core;
 using KingFighting.Spawner;
-using KingFighting.Character;
-using System.Collections.Generic;
-using UnityEngine;
-using Unity.Cinemachine;
 using Sirenix.OdinInspector;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Unity.Cinemachine;
+using UnityEngine;
 
 namespace KingFighting.GameMode
 {
     public class GameMode : MonoBehaviour
     {
+        private Action onGameOver;
+
         private ICharacter mainCharacter;
         private List<ICharacter> teammates;
         private List<ICharacter> enemies;
@@ -40,6 +44,12 @@ namespace KingFighting.GameMode
             SpawnEnemies(enemyCount);
 
             GameStart();
+        }
+
+        public void AddListenerGameOver(Action action)
+        {
+            onGameOver -= action;
+            onGameOver += action;
         }
 
         private void SpawnEnemies(int enemyCount)
@@ -87,7 +97,6 @@ namespace KingFighting.GameMode
             var character = mainPlayerSPawner.SpawnMainCharacter();
             if (character != null) {
                 character.transform.position = mainPlayerSPawner.transform.position;
-                followCam.Follow = character.transform;
 
                 character.AddListenerMainCharacterDeath(GameOver);
 
@@ -101,9 +110,11 @@ namespace KingFighting.GameMode
 
         }
 
-        private void GameStart()
+        private async void GameStart()
         {
+            await Task.Delay(2000);
 
+            followCam.Follow = mainCharacter.Self.transform;
         }
     }
 }

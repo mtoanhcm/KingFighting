@@ -27,6 +27,8 @@ namespace KingFighting.Character
             sensorComp.enabled = false;
             combatComp.enabled = false;
             healthComp.enabled = false;
+
+            movementComp.Disable();
         }
 
         protected virtual void InitComponent(CharacterData data) {

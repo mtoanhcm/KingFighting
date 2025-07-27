@@ -19,12 +19,14 @@ namespace KingFighting.Character
         private Vector3 lookPos;
 
         private Rigidbody rb;
+        private Collider myCollider;
         private bool isInCombat;
         private bool canMove;
 
         private void Awake()
         {
             rb = GetComponent<Rigidbody>();
+            myCollider = GetComponent<Collider>();
         }
 
         private void FixedUpdate()
@@ -53,6 +55,8 @@ namespace KingFighting.Character
             this.combatMoveSpeed = combatMoveSpeed;
 
             canMove = true;
+            rb.isKinematic = false;
+            myCollider.isTrigger = false;
 
             enabled = true;
         }
@@ -81,6 +85,12 @@ namespace KingFighting.Character
         {
             onMoveByVector -= action;
             onMoveByVector += action;
+        }
+
+        public void Disable()
+        {
+            rb.isKinematic = true;
+            myCollider.isTrigger = true;
         }
     }
 }
