@@ -20,6 +20,8 @@ namespace KingFighting.GameMode
         private int teammateAmount;
         private int enemyAmount;
 
+        private const int MAX_PLAYER = 50;
+
         private void Awake()
         {
             teammateAmount = 1;
@@ -55,6 +57,9 @@ namespace KingFighting.GameMode
                 return;
             }
 
+            enemyAmount = Mathf.Clamp(enemyAmount, 0, MAX_PLAYER);
+            enemyAmountInput.text = enemyAmount.ToString();
+
             CheckVisibleSubmitButton();
         }
 
@@ -62,9 +67,12 @@ namespace KingFighting.GameMode
         {
             if (!int.TryParse(content, out teammateAmount))
             {
-                Debug.LogError("Wrong input, please input number onlye");
+                Debug.LogError("Wrong input, please input number only");
                 return;
             }
+
+            teammateAmount = Mathf.Clamp(teammateAmount, 0, MAX_PLAYER);
+            teammateAmountInput.text = teammateAmount.ToString();
 
             CheckVisibleSubmitButton();
         }

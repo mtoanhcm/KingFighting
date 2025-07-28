@@ -11,7 +11,7 @@ namespace KingFighting.Spawner
         [SerializeField]
         private FighterCharacter fighterCharacterPrefab;
 
-        public FighterCharacter SpawnCharacter()
+        public FighterCharacter SpawnCharacter(Vector3 spawnPosition, Vector3 direction)
         {
             if (fighterCharacterPrefab == null || configs == null || configs.Length == 0)
             {
@@ -19,7 +19,7 @@ namespace KingFighting.Spawner
                 return null;
             }
 
-            var character = Instantiate(fighterCharacterPrefab, transform.position, Quaternion.identity);
+            var character = Instantiate(fighterCharacterPrefab, spawnPosition, Quaternion.Euler(direction));
             character.Spawn(new CharacterData(configs[Random.Range(0, configs.Length)]));
             return character;
         }

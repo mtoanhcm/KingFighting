@@ -2,6 +2,7 @@ using UnityEngine;
 using KingFighting.Core;
 using NUnit.Framework;
 using System.Collections.Generic;
+using System;
 
 namespace KingFighting.Character
 {
@@ -18,6 +19,7 @@ namespace KingFighting.Character
         protected CharacterSensor sensorComp;
 
         protected List<CharacterComponent> components;
+        protected Action<CharacterBase> onCharacterDeath;
 
         public virtual void Spawn(CharacterData characterData)
         {
@@ -25,6 +27,12 @@ namespace KingFighting.Character
 
             InitComponent(characterData);
             InitEventListener();
+        }
+
+        public void AddListenerCharacterDeath(Action<CharacterBase> action)
+        {
+            onCharacterDeath -= action;
+            onCharacterDeath += action;
         }
 
         protected virtual void OnDeath()
@@ -35,6 +43,8 @@ namespace KingFighting.Character
             healthComp.enabled = false;
 
             movementComp.Disable();
+
+            onCharacterDeath?.Invoke(this);
         }
 
         protected virtual void InitComponent(CharacterData data) {

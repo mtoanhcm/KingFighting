@@ -1,3 +1,4 @@
+using KingFighting.Character;
 using KingFighting.Core;
 using System;
 using TMPro;
@@ -9,10 +10,21 @@ namespace KingFighting.GameMode
     {
         [SerializeField]
         private TextMeshProUGUI countdownTxt;
+        [SerializeField]
+        private TextMeshProUGUI levelTxt;
+
+        private const string LEVEL = "LEVEL";
 
         protected override void Init()
         {
             
+        }
+
+        public override void Show()
+        {
+            base.Show();
+
+            levelTxt.text = $"{LEVEL} {GlobalData.CurrentGameModeLevel}";
         }
 
         internal void UpdateCountdown(string countDown)

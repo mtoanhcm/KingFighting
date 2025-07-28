@@ -52,6 +52,11 @@ namespace KingFighting.Character
 
         public void UpdateMoveFactoByInputDirection(Vector2 moveInputDirect)
         {
+            if (!isActiveComponent)
+            {
+                moveInputDirect = Vector2.zero;
+            }
+
             if (isInCombat)
             {
                 animator.SetFloat(moveXFactorHash, moveInputDirect.x);

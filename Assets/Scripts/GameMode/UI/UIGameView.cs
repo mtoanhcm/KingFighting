@@ -6,9 +6,6 @@ namespace KingFighting.GameMode
 {
     public class UIGameView : UISceneView
     {
-        private void Start()
-        {
-            ShowView<ChooseModeView>();
-        }
+        
     }
 }

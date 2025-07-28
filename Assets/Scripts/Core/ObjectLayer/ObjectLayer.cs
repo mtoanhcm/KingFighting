@@ -23,5 +23,21 @@ namespace KingFighting.Core
                 _ => 0,
             };
         }
+
+        public static LayerMask NameToLayerMask(string layerName)
+        {
+            var layerIndex = LayerMask.NameToLayer(layerName);
+            if (layerIndex < 0)
+            {
+                Debug.LogWarning($"Layer '{layerName}' does not exist.");
+                return 0;
+            }
+
+            return (LayerMask)(1 << layerIndex);
+        }
+
+        public static LayerMask IndexToLayer(int layerIndex) {
+            return (LayerMask)(1 << layerIndex);
+        }
     }
 }
