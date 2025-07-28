@@ -1,20 +1,38 @@
 using UnityEngine;
 using KingFighting.Core;
+using NUnit.Framework;
+using System.Collections.Generic;
+using System;
 
 namespace KingFighting.Character
 {
-    public abstract class CharacterBase : MonoBehaviour
+    public abstract class CharacterBase : MonoBehaviour, ICharacter, IGameStateAffect
     {
+        public bool IsAlive => healthComp.IsAlive;
+
+        public Transform Self => transform;
+
         protected CharacterHealth healthComp;
         protected CharacterCombat combatComp;
         protected CharacterAnimation animationComp;
         protected CharacterMovement movementComp;
         protected CharacterSensor sensorComp;
 
+        protected List<CharacterComponent> components;
+        protected Action<CharacterBase> onCharacterDeath;
+
         public virtual void Spawn(CharacterData characterData)
         {
+            components = new List<CharacterComponent>();
+
             InitComponent(characterData);
             InitEventListener();
+        }
+
+        public void AddListenerCharacterDeath(Action<CharacterBase> action)
+        {
+            onCharacterDeath -= action;
+            onCharacterDeath += action;
         }
 
         protected virtual void OnDeath()
@@ -23,6 +41,10 @@ namespace KingFighting.Character
             sensorComp.enabled = false;
             combatComp.enabled = false;
             healthComp.enabled = false;
+
+            movementComp.Disable();
+
+            onCharacterDeath?.Invoke(this);
         }
 
         protected virtual void InitComponent(CharacterData data) {
@@ -66,6 +88,8 @@ namespace KingFighting.Character
             }
 
             movementComp.Init(moveSpeed, combatMoveSpeed, rotateSpeed);
+
+            components.Add(movementComp);
         }
 
         protected virtual void InitAnimationComp()
@@ -74,6 +98,8 @@ namespace KingFighting.Character
             {
                 animationComp = gameObject.AddComponent<CharacterAnimation>();
             }
+
+            components.Add(animationComp);
         }
 
         protected virtual void InitCombatComp(float damage, float attackRange, float cooldownAttack)
@@ -85,6 +111,8 @@ namespace KingFighting.Character
 
             var targetLayer = ObjectLayer.TargetHitLayer(LayerMask.LayerToName(gameObject.layer));
             combatComp.Init(damage, attackRange, cooldownAttack, targetLayer);
+
+            components.Add(combatComp);
         }
 
         protected virtual void InitCharacterSensor(float detectRange)
@@ -96,6 +124,17 @@ namespace KingFighting.Character
 
             var targetLayer = ObjectLayer.TargetHitLayer(LayerMask.LayerToName(gameObject.layer));
             sensorComp.Init(detectRange, targetLayer);
+
+            components.Add (sensorComp);
+        }
+
+        public void OnGameStateChange(GamePlayStateType state)
+        {
+            bool isActiveAllComponent = state == GamePlayStateType.Start;
+
+            foreach (var comp in components) { 
+                comp.SetActive(isActiveAllComponent);
+            }
         }
     }
 }

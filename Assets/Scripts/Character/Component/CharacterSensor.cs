@@ -1,10 +1,10 @@
+using KingFighting.Core;
 using System;
-using System.Linq;
 using UnityEngine;
 
 namespace KingFighting.Character
 {
-    public class CharacterSensor : MonoBehaviour
+    public class CharacterSensor : CharacterComponent
     {
         private Action<Transform> onDetectEnemy;
 

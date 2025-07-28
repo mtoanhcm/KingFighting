@@ -8,22 +8,20 @@ namespace KingFighting.Spawner
         [SerializeField]
         private CharacterDataConfig config;
         [SerializeField]
-        private MainCharacter mainCharacter;
+        private MainCharacter mainCharacterPrefab;
 
-        private void Start()
+        public MainCharacter SpawnMainCharacter()
         {
-            SpawnMainCharacter();
-        }
-
-        public void SpawnMainCharacter()
-        {
-            if (mainCharacter == null || config == null)
+            if (mainCharacterPrefab == null || config == null)
             {
                 Debug.LogError("Cannot spawn main character because of missing config");
-                return;
+                return null;
             }
 
-            mainCharacter.Spawn(new CharacterData(config));
+            var character = Instantiate(mainCharacterPrefab, transform.position, Quaternion.identity);
+            character.Spawn(new CharacterData(config));
+
+            return character;
         }
     }
 }

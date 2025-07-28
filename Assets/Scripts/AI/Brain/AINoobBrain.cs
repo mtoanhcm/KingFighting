@@ -33,7 +33,6 @@ namespace KingFighting.AI
         }
 
         public override void SetTarget(Transform target) {
-            this.target = target;
             context.Target = target;
         }
 
@@ -58,19 +57,19 @@ namespace KingFighting.AI
             stateMachine.AddTransition(chaseState, combatState, () => IsTargetInRange());
             stateMachine.AddTransition(combatState, chaseState, () => !IsTargetInRange());
 
-            stateMachine.AddTransition(chaseState, idleState, () => target == null);
-            stateMachine.AddTransition(combatState, idleState, () => target == null);
+            stateMachine.AddTransition(chaseState, idleState, () => context.Target == null);
+            stateMachine.AddTransition(combatState, idleState, () => context.Target == null);
 
-            stateMachine.AddTransition(idleState, chaseState, () => target != null);
+            stateMachine.AddTransition(idleState, chaseState, () => context.Target != null);
         }
 
         private bool IsTargetInRange() {
 
-            if (target == null) {
+            if (context.Target == null) {
                 return false;
             }
 
-            var distanceToTarget = (target.transform.position - transform.position).sqrMagnitude;
+            var distanceToTarget = (context.Target.transform.position - transform.position).sqrMagnitude;
             var attackRange = combatComp.AttackRange;
 
             return distanceToTarget < attackRange * attackRange;

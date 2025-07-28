@@ -5,7 +5,7 @@ using System;
 namespace KingFighting.Character
 {
     [RequireComponent(typeof(Rigidbody))]
-    public class CharacterMovement : MonoBehaviour, IMovement
+    public class CharacterMovement : CharacterComponent, IMovement
     {
         private Action<Vector2> onMoveByVector;
 
@@ -19,27 +19,39 @@ namespace KingFighting.Character
         private Vector3 lookPos;
 
         private Rigidbody rb;
+        private Collider myCollider;
         private bool isInCombat;
         private bool canMove;
 
         private void Awake()
         {
             rb = GetComponent<Rigidbody>();
+            myCollider = GetComponent<Collider>();
         }
 
         private void FixedUpdate()
         {
+            if (!isActiveComponent)
+            {
+                return;
+            }
+
             var moveVector = (isInCombat ? combatMoveSpeed : moveSpeed) * Time.fixedDeltaTime * moveDirection;
             var lookVector = isInCombat ?
                 (lookPos - transform.position).normalized :
                 moveVector.normalized;
+
+            if(lookVector == Vector3.zero)
+            {
+                lookVector = transform.forward.normalized;
+            }
 
             if(canMove && moveVector != Vector3.zero)
             {
                 rb.MovePosition(rb.position + moveVector);
             }
 
-            if(lookVector != Vector3.zero)
+            if(canMove)
             {
                 var quaternion = Quaternion.LookRotation(lookVector, Vector3.up);
                 rb.MoveRotation(Quaternion.Slerp(rb.rotation, quaternion, rotateSpeed * Time.fixedDeltaTime));
@@ -53,6 +65,8 @@ namespace KingFighting.Character
             this.combatMoveSpeed = combatMoveSpeed;
 
             canMove = true;
+            rb.isKinematic = false;
+            myCollider.isTrigger = false;
 
             enabled = true;
         }
@@ -81,6 +95,12 @@ namespace KingFighting.Character
         {
             onMoveByVector -= action;
             onMoveByVector += action;
+        }
+
+        public void Disable()
+        {
+            rb.isKinematic = true;
+            myCollider.isTrigger = true;
         }
     }
 }

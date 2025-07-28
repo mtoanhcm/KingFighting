@@ -1,11 +1,12 @@
 using System;
 using UnityEngine;
 using KingFighting.Input;
+using KingFighting.Core;
 
 namespace KingFighting.Character
 {
     [DisallowMultipleComponent]
-    public class CharacterInputControl : MonoBehaviour
+    public class CharacterInputControl : CharacterComponent
     {
         private CharacterInputMapping input;
 

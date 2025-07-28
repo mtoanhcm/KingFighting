@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ModelTex
+  m_Name: MainCharModelTex
   m_Shader: {fileID: 4800000, guid: d10eca59700924a13bdd50a73df546e1, type: 3}
   m_ShaderKeywords: _EMISSION _SPECULARHIGHLIGHTS_OFF
   m_LightmapFlags: 0
