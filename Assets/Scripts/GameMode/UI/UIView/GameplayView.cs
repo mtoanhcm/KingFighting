@@ -3,7 +3,7 @@ using KingFighting.Core;
 
 namespace KingFighting.GameMode
 {
-    public class GameOverView : UIView
+    public class GameplayView : UIView
     {
         protected override void Init()
         {

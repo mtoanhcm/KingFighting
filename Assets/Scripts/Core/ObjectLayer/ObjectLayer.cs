@@ -16,9 +16,9 @@ namespace KingFighting.Core
         public static LayerMask TargetHitLayer(string seftLayerName) { 
             return seftLayerName switch
             {
-                PlayerLayerName => LayerMask.GetMask(EnemyLayerName, ObstacleLayerName),
-                EnemyLayerName => LayerMask.GetMask(PlayerLayerName, TeammateLayerName, ObstacleLayerName),
-                TeammateLayerName => LayerMask.GetMask(EnemyLayerName, ObstacleLayerName),
+                PlayerLayerName => LayerMask.GetMask(EnemyLayerName),
+                EnemyLayerName => LayerMask.GetMask(PlayerLayerName, TeammateLayerName),
+                TeammateLayerName => LayerMask.GetMask(EnemyLayerName),
                 ObstacleLayerName => LayerMask.GetMask(PlayerLayerName, TeammateLayerName, EnemyLayerName),
                 _ => 0,
             };

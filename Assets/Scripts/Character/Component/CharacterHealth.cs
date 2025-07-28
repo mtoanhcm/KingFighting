@@ -4,7 +4,7 @@ using KingFighting.Core;
 
 namespace KingFighting.Character
 {
-    public class CharacterHealth : MonoBehaviour, IHealth
+    public class CharacterHealth : CharacterComponent, IHealth
     {
         private Action onDeath;
         private Action onTakeHit;

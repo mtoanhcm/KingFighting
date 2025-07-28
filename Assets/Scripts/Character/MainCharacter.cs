@@ -39,6 +39,8 @@ namespace KingFighting.Character
                 inputControlComp = gameObject.AddComponent<CharacterInputControl>();
                 inputControlComp.Init();
             }
+
+            components.Add(inputControlComp);
         }
 
         private void MainCharacterDeath()

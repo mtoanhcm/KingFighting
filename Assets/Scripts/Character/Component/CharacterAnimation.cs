@@ -1,10 +1,11 @@
 using UnityEngine;
 using KingFighting.Animation;
 using System;
+using KingFighting.Core;
 
 namespace KingFighting.Character
 {
-    public class CharacterAnimation : MonoBehaviour
+    public class CharacterAnimation : CharacterComponent
     {
         private Action onTriggerHitByAnimEvent;
         private Animator animator;
@@ -24,6 +25,8 @@ namespace KingFighting.Character
         private void Awake()
         {
             animator = gameObject.GetComponentInChildren<Animator>();
+            animator.speed = 1.5f;
+
             attackAnimaton = gameObject.GetComponentInChildren<AttackAnimationEvent>();
             if(attackAnimaton != null)
             {

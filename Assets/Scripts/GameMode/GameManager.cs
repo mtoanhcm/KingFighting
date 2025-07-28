@@ -7,27 +7,27 @@ namespace KingFighting.GameMode
     {
         public static GameManager Instance;
 
+        public GameMode GameMode => gameMode;
+        public UIGameView GamePlayView => gameplayView;
+
         [SerializeField]
         private GameMode gameMode;
         [SerializeField]
-        private UISceneView sceneView;
+        private UIGameView gameplayView;
 
         private void Awake()
         {
             if (Instance == null) { 
                 Instance = this;
             }
-
-            gameMode.AddListenerGameOver(ActiveGameOverEvent);
         }
 
         private void Start()
         {
-            
-        }
-
-        private void ActiveGameOverEvent()
-        {
+            if(gameplayView.GetView<ChooseModeView>(out var chooseModeView))
+            {
+                chooseModeView.ChoosePlayerAmount += gameMode.InitPlayers;
+            }
 
         }
     }

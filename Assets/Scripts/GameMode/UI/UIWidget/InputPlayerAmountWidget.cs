@@ -36,7 +36,12 @@ namespace KingFighting.GameMode
                 enemyAmount = 0;
             }
 
-            submitBtn.onClick.AddListener(() => OnSubmitPlayerAmountForGameMode?.Invoke(teammateAmount, enemyAmount));
+            submitBtn.onClick.AddListener(() =>
+            {
+                submitBtn.onClick.RemoveAllListeners();
+                OnSubmitPlayerAmountForGameMode?.Invoke(teammateAmount, enemyAmount);
+            });
+
             submitBtn.interactable = false;
 
             CheckVisibleSubmitButton();

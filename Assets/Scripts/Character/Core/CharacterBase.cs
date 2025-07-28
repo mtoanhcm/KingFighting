@@ -1,9 +1,11 @@
 using UnityEngine;
 using KingFighting.Core;
+using NUnit.Framework;
+using System.Collections.Generic;
 
 namespace KingFighting.Character
 {
-    public abstract class CharacterBase : MonoBehaviour, ICharacter
+    public abstract class CharacterBase : MonoBehaviour, ICharacter, IGameStateAffect
     {
         public bool IsAlive => healthComp.IsAlive;
 
@@ -15,8 +17,12 @@ namespace KingFighting.Character
         protected CharacterMovement movementComp;
         protected CharacterSensor sensorComp;
 
+        protected List<CharacterComponent> components;
+
         public virtual void Spawn(CharacterData characterData)
         {
+            components = new List<CharacterComponent>();
+
             InitComponent(characterData);
             InitEventListener();
         }
@@ -72,6 +78,8 @@ namespace KingFighting.Character
             }
 
             movementComp.Init(moveSpeed, combatMoveSpeed, rotateSpeed);
+
+            components.Add(movementComp);
         }
 
         protected virtual void InitAnimationComp()
@@ -80,6 +88,8 @@ namespace KingFighting.Character
             {
                 animationComp = gameObject.AddComponent<CharacterAnimation>();
             }
+
+            components.Add(animationComp);
         }
 
         protected virtual void InitCombatComp(float damage, float attackRange, float cooldownAttack)
@@ -91,6 +101,8 @@ namespace KingFighting.Character
 
             var targetLayer = ObjectLayer.TargetHitLayer(LayerMask.LayerToName(gameObject.layer));
             combatComp.Init(damage, attackRange, cooldownAttack, targetLayer);
+
+            components.Add(combatComp);
         }
 
         protected virtual void InitCharacterSensor(float detectRange)
@@ -102,6 +114,17 @@ namespace KingFighting.Character
 
             var targetLayer = ObjectLayer.TargetHitLayer(LayerMask.LayerToName(gameObject.layer));
             sensorComp.Init(detectRange, targetLayer);
+
+            components.Add (sensorComp);
+        }
+
+        public void OnGameStateChange(GamePlayStateType state)
+        {
+            bool isActiveAllComponent = state == GamePlayStateType.Start;
+
+            foreach (var comp in components) { 
+                comp.SetActive(isActiveAllComponent);
+            }
         }
     }
 }

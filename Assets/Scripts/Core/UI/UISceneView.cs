@@ -9,10 +9,10 @@ namespace KingFighting.Core
 
         private void Awake()
         {
-            views = new List<UIView>(gameObject.GetComponentsInChildren<UIView>());
+            views = new List<UIView>(gameObject.GetComponentsInChildren<UIView>(true));
         }
 
-        public virtual T ShowView<T>(T viewType) where T : UIView
+        public virtual T ShowView<T>() where T : UIView
         {
             foreach (var view in views)
             {

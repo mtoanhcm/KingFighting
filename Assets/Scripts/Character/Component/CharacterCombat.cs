@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace KingFighting.Character
 {
-    public class CharacterCombat : MonoBehaviour, ICombat
+    public class CharacterCombat : CharacterComponent, ICombat
     {
         public float AttackRange => attackRange;
 
@@ -20,11 +20,16 @@ namespace KingFighting.Character
         private Collider[] hits;
         private float tempCooldownAttack;
 
-        private const float ANGLE_DETECT_DAMAGE = 30;
+        private const float ANGLE_DETECT_DAMAGE = 15;
         // Start is called once before the first execution of Update after the MonoBehaviour is created
 
         private void Update()
         {
+            if (!isActiveComponent)
+            {
+                return;
+            }
+
             UpdateFocusPoint(enemy != null ? enemy.position : Vector3.zero);
             AutoAttack();
         }
@@ -93,6 +98,27 @@ namespace KingFighting.Character
                 }
             }
         }
+
+#if UNITY_EDITOR
+        void OnDrawGizmos()
+        {
+            Gizmos.color = Color.red;
+
+            Vector3 origin = transform.position;
+            float halfAngle = ANGLE_DETECT_DAMAGE * 0.5f;
+
+            // Draw left and right cone edges
+            Vector3 leftDir = Quaternion.AngleAxis(-halfAngle, transform.up) * transform.forward;
+            Vector3 rightDir = Quaternion.AngleAxis(halfAngle, transform.up) * transform.forward;
+
+            Gizmos.DrawLine(origin, origin + leftDir * attackRange);
+            Gizmos.DrawLine(origin, origin + rightDir * attackRange);
+
+            // Draw center line
+            Gizmos.DrawLine(origin, origin + transform.forward * attackRange);
+        }
+#endif
+
 
         private void AutoAttack()
         {

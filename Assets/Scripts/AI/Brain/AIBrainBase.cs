@@ -4,7 +4,7 @@ using KingFighting.Core;
 
 namespace KingFighting.AI
 {
-    public abstract class AIBrainBase : MonoBehaviour
+    public abstract class AIBrainBase : CharacterComponent
     {
         protected Func<bool> onStopBrain;
         protected IMovement movementComp;

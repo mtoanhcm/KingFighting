@@ -1,19 +1,27 @@
+using KingFighting.Core;
+using System;
 using UnityEngine;
 
 namespace KingFighting.GameMode
 {
-    public class ChooseModeView : MonoBehaviour
+    public class ChooseModeView : UIView
     {
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
+        public event Action<int, int> ChoosePlayerAmount;
+
+        [SerializeField]
+        private InputPlayerAmountWidget[] pickAmountWidget;
+
+        protected override void Init()
         {
-        
+            foreach (var widget in pickAmountWidget) {
+                widget.OnSubmitPlayerAmountForGameMode -= SubmitPlayerAmount;
+                widget.OnSubmitPlayerAmountForGameMode += SubmitPlayerAmount;
+            }
         }
 
-        // Update is called once per frame
-        void Update()
+        private void SubmitPlayerAmount(int teammateAmount, int enemyAmount)
         {
-        
+            ChoosePlayerAmount?.Invoke(teammateAmount, enemyAmount);
         }
     }
 }

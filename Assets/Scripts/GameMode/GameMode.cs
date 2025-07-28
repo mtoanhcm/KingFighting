@@ -1,8 +1,6 @@
 using KingFighting.Core;
 using KingFighting.Spawner;
-using Sirenix.OdinInspector;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Cinemachine;
@@ -12,7 +10,7 @@ namespace KingFighting.GameMode
 {
     public class GameMode : MonoBehaviour
     {
-        private Action onGameOver;
+        private Action<GamePlayStateType> onGameStateChanged;
 
         private ICharacter mainCharacter;
         private List<ICharacter> teammates;
@@ -36,20 +34,29 @@ namespace KingFighting.GameMode
         [SerializeField]
         private CinemachineCamera followCam;
 
-        [Button]
-        public void Init(int teammateCount, int enemyCount)
+        [Header("Environment")]
+        [SerializeField]
+        private Transform boxingRing;
+
+        public void InitPlayers(int teammateCount, int enemyCount)
         {
+            onGameStateChanged?.Invoke(GamePlayStateType.Prepare);
+
+            PrepareEnvironment(teammateCount + enemyCount);
+
             SpawnMainCharacter();
+
+            teammateCount--;
+
             SpawnTeammates(teammateCount);
             SpawnEnemies(enemyCount);
 
             GameStart();
         }
 
-        public void AddListenerGameOver(Action action)
+        private void PrepareEnvironment(int totalFighters)
         {
-            onGameOver -= action;
-            onGameOver += action;
+            //boxingRing.localScale = new Vector3(3, 1, 3 );
         }
 
         private void SpawnEnemies(int enemyCount)
@@ -67,6 +74,9 @@ namespace KingFighting.GameMode
                 if (character != null)
                 {
                     character.transform.position = enemySpawnArea.GetRandomPositionInArea();
+
+                    onGameStateChanged += character.OnGameStateChange;
+
                     enemies.Add(character);
                 }
             }
@@ -87,6 +97,9 @@ namespace KingFighting.GameMode
                 if (character != null) {
 
                     character.transform.position = teammateSpawnArea.GetRandomPositionInArea();
+
+                    onGameStateChanged += character.OnGameStateChange;
+
                     teammates.Add(character);
                 }
             }
@@ -100,6 +113,8 @@ namespace KingFighting.GameMode
 
                 character.AddListenerMainCharacterDeath(GameOver);
 
+                onGameStateChanged += character.OnGameStateChange;
+
                 mainCharacter = character;
 
             }
@@ -107,14 +122,34 @@ namespace KingFighting.GameMode
 
         private void GameOver()
         {
-
+            onGameStateChanged?.Invoke(GamePlayStateType.End);
+            GameManager.Instance.GamePlayView.ShowView<GameOverView>();
         }
 
         private async void GameStart()
         {
-            await Task.Delay(2000);
+            await Task.Delay(1000);
 
             followCam.Follow = mainCharacter.Self.transform;
+
+            var startGameView = GameManager.Instance.GamePlayView.ShowView<StarGameView>();
+            int countDown = 120;
+
+            while (countDown > 0) {
+                startGameView.UpdateCountdown(countDown.ToString());
+
+                await Task.Delay(1000);
+
+                countDown--;
+            }
+
+            startGameView.UpdateCountdown("GO");
+
+            await Task.Delay(500);
+
+            GameManager.Instance.GamePlayView.ShowView<GameplayView>();
+
+            onGameStateChanged?.Invoke(GamePlayStateType.Start);
         }
     }
 }

@@ -5,7 +5,7 @@ using System;
 namespace KingFighting.Character
 {
     [RequireComponent(typeof(Rigidbody))]
-    public class CharacterMovement : MonoBehaviour, IMovement
+    public class CharacterMovement : CharacterComponent, IMovement
     {
         private Action<Vector2> onMoveByVector;
 
@@ -31,17 +31,27 @@ namespace KingFighting.Character
 
         private void FixedUpdate()
         {
+            if (!isActiveComponent)
+            {
+                return;
+            }
+
             var moveVector = (isInCombat ? combatMoveSpeed : moveSpeed) * Time.fixedDeltaTime * moveDirection;
             var lookVector = isInCombat ?
                 (lookPos - transform.position).normalized :
                 moveVector.normalized;
+
+            if(lookVector == Vector3.zero)
+            {
+                lookVector = transform.forward.normalized;
+            }
 
             if(canMove && moveVector != Vector3.zero)
             {
                 rb.MovePosition(rb.position + moveVector);
             }
 
-            if(lookVector != Vector3.zero)
+            if(canMove)
             {
                 var quaternion = Quaternion.LookRotation(lookVector, Vector3.up);
                 rb.MoveRotation(Quaternion.Slerp(rb.rotation, quaternion, rotateSpeed * Time.fixedDeltaTime));
