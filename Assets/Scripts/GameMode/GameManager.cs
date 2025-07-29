@@ -25,6 +25,8 @@ namespace KingFighting.GameMode
 
         private void Start()
         {
+            Application.targetFrameRate = 60;
+
             gameplayView.HideAllViews();
 
             if (CheckPlayNextLevel())
