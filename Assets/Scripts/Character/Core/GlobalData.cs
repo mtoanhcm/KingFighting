@@ -16,7 +16,7 @@ namespace KingFighting.Character
         public static void Reset() {
             CurrentGameModeLevel = 1;
             TeammatePlayerAmountPick = 0;
-            CurrentGameModeLevel = 0;
+            EnemyPlayerAmountPick = 0;
         }
 
         public static void UpdateGameLevel() {

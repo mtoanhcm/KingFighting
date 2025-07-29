@@ -20,7 +20,7 @@ namespace KingFighting.Character
         private Collider[] hits;
         private float tempCooldownAttack;
 
-        private const float ANGLE_DETECT_DAMAGE = 15;
+        private const float ANGLE_DETECT_DAMAGE = 20;
         // Start is called once before the first execution of Update after the MonoBehaviour is created
 
         private void Update()

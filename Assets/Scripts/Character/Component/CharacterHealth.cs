@@ -7,7 +7,7 @@ namespace KingFighting.Character
     public class CharacterHealth : CharacterComponent, IHealth
     {
         private Action onDeath;
-        private Action onTakeHit;
+        private Action<float> onTakeHit;
         public float HealthInPercent => currentHealth / maxHealth;
         public bool IsAlive => currentHealth > 0;
 
@@ -30,10 +30,10 @@ namespace KingFighting.Character
                 return;
             }
 
-            onTakeHit?.Invoke();
+            onTakeHit?.Invoke(HealthInPercent);
         }
 
-        public void AddListenerTakeHit(Action action) { 
+        public void AddListenerTakeHit(Action<float> action) { 
             onTakeHit -= action;
             onTakeHit += action;
         }
