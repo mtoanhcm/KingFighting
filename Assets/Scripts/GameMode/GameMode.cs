@@ -12,11 +12,20 @@ namespace KingFighting.GameMode
 {
     public class GameMode : MonoBehaviour
     {
+        public GamePlayStateType CurrentGameState { 
+            get { return currentGameState; }
+            set {  
+                currentGameState = value;
+                onGameStateChanged?.Invoke(currentGameState);
+            }
+        } 
+
         private Action<GamePlayStateType> onGameStateChanged;
 
         private ICharacter mainCharacter;
         private List<ICharacter> teammates;
         private List<ICharacter> enemies;
+        private GamePlayStateType currentGameState;
 
         [Header("Spawner")]
         [SerializeField]
@@ -44,7 +53,7 @@ namespace KingFighting.GameMode
 
         public async void InitPlayers(int teammateCount, int enemyCount)
         {
-            onGameStateChanged?.Invoke(GamePlayStateType.Prepare);
+            CurrentGameState = GamePlayStateType.Prepare;
 
             PrepareEnvironment(teammateCount + enemyCount);
 
@@ -60,7 +69,9 @@ namespace KingFighting.GameMode
 
         private void PrepareEnvironment(int totalFighters)
         {
-            //boxingRing.localScale = new Vector3(3, 1, 3 );
+            var scale = 1 + totalFighters / 2 * 0.1f;
+
+            boxingRing.localScale = new Vector3(scale, 1, scale);
         }
 
         private async Task SpawnEnemies(int enemyCount)
@@ -75,7 +86,7 @@ namespace KingFighting.GameMode
             for (var i = 0; i < enemyCount; i++)
             {
                 var spawnPos = enemySpawnArea.GetRandomPositionInArea(0.5f, ObjectLayer.NameToLayerMask("Enemy"));
-                var character = enemySpawner.SpawnCharacter(spawnPos, Vector3.up * 180);
+                var character = enemySpawner.SpawnCharacter(spawnPos, Vector3.up * 180, GlobalData.CurrentGameModeLevel);
                 if (character != null)
                 {
                     onGameStateChanged += character.OnGameStateChange;
@@ -99,7 +110,7 @@ namespace KingFighting.GameMode
             for(var i = 0; i < teammateCount; i++)
             {
                 var spawnPos = teammateSpawnArea.GetRandomPositionInArea(0.5f, ObjectLayer.NameToLayerMask("Teammate"));
-                var character = teammteSpawner.SpawnCharacter(spawnPos, Vector3.up);
+                var character = teammteSpawner.SpawnCharacter(spawnPos, Vector3.up, GlobalData.CurrentGameModeLevel / 2);
                 if (character != null)
                 {
                     onGameStateChanged += character.OnGameStateChange;
@@ -120,6 +131,16 @@ namespace KingFighting.GameMode
 
                 onGameStateChanged += character.OnGameStateChange;
 
+                //Register health change for UI
+                if(character.TryGetComponent<CharacterHealth>(out var healthComp))
+                {
+                    if(GameManager.Instance.GamePlayView.GetView<GameplayView>(out var view))
+                    {
+                        healthComp.AddListenerTakeHit(view.ChangeHealthAmount);
+                        healthComp.TakeDamage(0);
+                    }
+                }
+
                 mainCharacter = character;
 
             }
@@ -133,7 +154,13 @@ namespace KingFighting.GameMode
                 return;
             }
 
-            onGameStateChanged?.Invoke(GamePlayStateType.End);
+            if(CurrentGameState == GamePlayStateType.End)
+            {
+                return;
+            }
+
+            CurrentGameState = GamePlayStateType.End;
+
             var view = GameManager.Instance.GamePlayView.ShowView<GameOverView>();
             view.SetShowGameoverWin(NextGameProgress);
 
@@ -142,7 +169,12 @@ namespace KingFighting.GameMode
 
         private void CheckLoseGame(CharacterBase mainChar)
         {
-            onGameStateChanged?.Invoke(GamePlayStateType.End);
+            if (CurrentGameState == GamePlayStateType.End)
+            {
+                return;
+            }
+
+            CurrentGameState = GamePlayStateType.End;
 
             var view = GameManager.Instance.GamePlayView.ShowView<GameOverView>();
             view.SetShowGameoverLose(NextGameProgress);
@@ -178,7 +210,7 @@ namespace KingFighting.GameMode
 
             GameManager.Instance.GamePlayView.ShowView<GameplayView>();
 
-            onGameStateChanged?.Invoke(GamePlayStateType.Start);
+            CurrentGameState = GamePlayStateType.Start;
         }
     }
 }

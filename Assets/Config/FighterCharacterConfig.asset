@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4743131015135664b8eb294e453c8361, type: 3}
   m_Name: FighterCharacterConfig
   m_EditorClassIdentifier: 
-  MaxHealth: 50
-  Damage: 10
-  AttackRange: 0.5
-  AttackSpeed: 2
-  CooldownAttack: 3
+  MaxHealth: 70
+  Damage: 20
+  AttackRange: 0.75
+  CooldownAttack: 2.5
   MoveSpeed: 1.125
   CombatMoveSpeed: 0.45
   RotateSpeed: 5
-  DetectEnemyRange: 5
+  DetectEnemyRange: 10
+  PowerIncrease: 1

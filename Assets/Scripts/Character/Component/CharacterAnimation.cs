@@ -25,7 +25,7 @@ namespace KingFighting.Character
         private void Awake()
         {
             animator = gameObject.GetComponentInChildren<Animator>();
-            animator.speed = 1.5f;
+            animator.speed = 1.8f;
 
             attackAnimaton = gameObject.GetComponentInChildren<AttackAnimationEvent>();
             if(attackAnimaton != null)
@@ -85,7 +85,7 @@ namespace KingFighting.Character
             animator.SetTrigger(attackHash);
         }
 
-        public void TriggerHit()
+        public void TriggerHit(float percentHealth)
         {
             animator.SetTrigger(hitHash);
         }
