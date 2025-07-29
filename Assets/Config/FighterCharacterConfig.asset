@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxHealth: 70
   Damage: 20
-  AttackRange: 0.75
+  AttackRange: 0.5
   CooldownAttack: 2.5
   MoveSpeed: 1.125
   CombatMoveSpeed: 0.45
   RotateSpeed: 5
-  DetectEnemyRange: 10
+  DetectEnemyRange: 15
   PowerIncrease: 1

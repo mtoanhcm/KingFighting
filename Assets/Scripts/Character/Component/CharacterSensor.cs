@@ -6,6 +6,11 @@ namespace KingFighting.Character
 {
     public class CharacterSensor : CharacterComponent
     {
+        [SerializeField]
+        private Transform targetEnemy;
+        [SerializeField]
+        private bool isDebug;
+
         private Action<Transform> onDetectEnemy;
 
         private float detectEnemyRange;
@@ -30,6 +35,7 @@ namespace KingFighting.Character
                 return;
             }
 
+            //GetRandomEnemy();
             GetNearestEnemy();
 
             tempCooldownCheckAround = Time.time + TIME_CHECK_AROUND;
@@ -40,15 +46,68 @@ namespace KingFighting.Character
             detectEnemyRange = detectRange;
             enemyLayerMask = targetLayer;
 
-            enemiesAround = new Collider[10];
+            enemiesAround = new Collider[48];
 
             enabled = true;
             isInit = true;
         }
 
+        private void GetRandomEnemy()
+        {
+            int totalEnemiesAround = Physics.OverlapSphereNonAlloc(transform.position, detectEnemyRange, enemiesAround, enemyLayerMask);
+            if (totalEnemiesAround <= 0)
+            {
+                onDetectEnemy?.Invoke(null);
+                return;
+            }
+
+            Transform enemy = null;
+            if (totalEnemiesAround == 1)
+            {
+                enemy = enemiesAround[0].transform;
+                var health = enemy.GetComponent<CharacterHealth>();
+
+                if (!health.IsAlive)
+                {
+                    enemy = null;
+                }
+
+                onDetectEnemy?.Invoke(enemy);
+                return;
+            }
+
+            
+            while(enemy == null)
+            {
+                var randomEnemy = enemiesAround[UnityEngine.Random.Range(0, enemiesAround.Length)];
+                if(randomEnemy == null)
+                {
+                    continue;
+                }
+
+                var health = randomEnemy.GetComponent<CharacterHealth>();
+                if (!health.IsAlive)
+                {
+                    continue;
+                }
+
+                enemy = randomEnemy.transform;
+                break;
+            }
+
+            onDetectEnemy?.Invoke(enemy);
+        }
+
         private void GetNearestEnemy() {
+
+            if (isDebug)
+            {
+                Debug.Log("AA");
+            }
+
             int totalEnemiesAround = Physics.OverlapSphereNonAlloc(transform.position, detectEnemyRange, enemiesAround, enemyLayerMask);
             if (totalEnemiesAround <= 0) {
+                targetEnemy = null;
                 onDetectEnemy?.Invoke(null);
                 return;
             }
@@ -63,6 +122,7 @@ namespace KingFighting.Character
                     enemy = null;
                 }
 
+                targetEnemy = enemy;
                 onDetectEnemy?.Invoke(enemy);
                 return;
             }
@@ -81,7 +141,7 @@ namespace KingFighting.Character
                     continue;
                 }
 
-                float sqrDist = Vector3.SqrMagnitude(enemy.position - transform.position);
+                float sqrDist = (enemy.position - transform.position).sqrMagnitude;
                 if (sqrDist < minSqrDist)
                 {
                     minSqrDist = sqrDist;
@@ -89,6 +149,7 @@ namespace KingFighting.Character
                 }
             }
 
+            targetEnemy = nearestEnemy;
             onDetectEnemy?.Invoke(nearestEnemy);
         }
 
@@ -106,8 +167,6 @@ namespace KingFighting.Character
             detecterLine.loop = true;
             detecterLine.useWorldSpace = false;
             detecterLine.widthMultiplier = 0.05f;
-
-            DrawDetectLine();
 
             detecterLine.positionCount = DETECTOR_LINE_SEGMENTS;
             for (int i = 0; i < DETECTOR_LINE_SEGMENTS; i++)
